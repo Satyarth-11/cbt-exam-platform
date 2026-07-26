@@ -15,14 +15,10 @@ services:
     name: cbt-backend
     env: docker
     region: singapore
-    plan: starter # Starter plan or paid tier required for Render Persistent Disk mounts
+    plan: free
     dockerfilePath: backend/Dockerfile
     dockerContext: backend
     healthCheckPath: /actuator/health
-    disk:
-      name: cbt-snapshot-disk
-      mountPath: /var/data/snapshots
-      sizeGB: 10
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
@@ -45,4 +41,4 @@ services:
       - key: APP_FRONTEND_URL
         sync: false # Set in Render Dashboard to Netlify site URL (e.g. https://your-site.netlify.app)
       - key: APP_SNAPSHOT_STORAGE_DIR
-        value: /var/data/snapshots
+        value: ./snapshots
