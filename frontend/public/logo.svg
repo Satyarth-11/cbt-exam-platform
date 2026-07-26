@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="omniGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="shieldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#06b6d4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background Shield Container -->
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#omniGrad)" />
+
+  <!-- Inner Shield outline -->
+  <path d="M32 14L46 20V32C46 41.5 40 48.5 32 52C24 48.5 18 41.5 18 32V20L32 14Z" 
+        fill="#0f172a" fill-opacity="0.35" stroke="url(#shieldGlow)" stroke-width="2.5" stroke-linejoin="round" />
+
+  <!-- Verification Checkmark inside shield -->
+  <path d="M26 32.5L30 36.5L38 26.5" 
+        stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#shadow)" />
+</svg>

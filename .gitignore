@@ -1,0 +1,31 @@
+# Environment & Secrets
+.env
+.env.local
+*.env
+
+# Runtime Snapshot & Upload Storage
+/snapshots/
+snapshots/
+backend/snapshots/
+*.jpeg
+*.jpg
+*.png
+
+# Node / Frontend Build Outputs
+node_modules/
+dist/
+build/
+.cache/
+
+# Java / Maven Build Outputs
+target/
+*.class
+*.jar
+*.war
+
+# IDE & OS Files
+.idea/
+.vscode/
+*.swp
+*.DS_Store
+Thumbs.db

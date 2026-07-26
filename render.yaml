@@ -1,0 +1,48 @@
+# ===================================================================
+# OMNITEST ENGINE — RENDER DEPLOYMENT BLUEPRINT (render.yaml)
+# ===================================================================
+# Deploy backend REST/WebSocket engine and managed PostgreSQL database to Render
+
+databases:
+  - name: cbtdb-postgres
+    databaseName: cbtdb
+    user: cbt_admin
+    region: singapore
+    plan: free
+
+services:
+  - type: web
+    name: cbt-backend
+    env: docker
+    region: singapore
+    plan: starter # Starter plan or paid tier required for Render Persistent Disk mounts
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    healthCheckPath: /actuator/health
+    disk:
+      name: cbt-snapshot-disk
+      mountPath: /var/data/snapshots
+      sizeGB: 10
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: cbtdb-postgres
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: cbtdb-postgres
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: cbtdb-postgres
+          property: password
+      - key: APP_JWT_SECRET
+        generateValue: true
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false # Set in Render Dashboard to Netlify site URL (e.g. https://your-site.netlify.app)
+      - key: APP_FRONTEND_URL
+        sync: false # Set in Render Dashboard to Netlify site URL (e.g. https://your-site.netlify.app)
+      - key: APP_SNAPSHOT_STORAGE_DIR
+        value: /var/data/snapshots
