@@ -25,7 +25,7 @@ services:
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: cbtdb-postgres
-          property: connectionString
+          property: jdbcConnectionString
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: cbtdb-postgres
