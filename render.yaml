@@ -16,7 +16,7 @@ services:
     env: docker
     region: singapore
     plan: free
-    dockerfilePath: backend/Dockerfile
+    dockerfilePath: Dockerfile
     dockerContext: backend
     healthCheckPath: /actuator/health
     envVars:
