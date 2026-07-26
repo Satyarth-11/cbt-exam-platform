@@ -17,7 +17,7 @@ services:
     region: singapore
     plan: free
     dockerfilePath: backend/Dockerfile
-    dockerContext: backend
+    dockerContext: .
     healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
