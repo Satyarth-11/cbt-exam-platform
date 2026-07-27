@@ -28,6 +28,37 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final com.exam.platform.security.RateLimitingFilter rateLimitingFilter;
 
+    @org.springframework.beans.factory.annotation.Value("${app.cors.allowed-origins:*}")
+    private String allowedOrigins;
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        if (allowedOrigins != null && !allowedOrigins.isBlank()) {
+            String[] origins = allowedOrigins.split(",");
+            for (String origin : origins) {
+                String trimmed = origin.trim();
+                if ("*".equals(trimmed)) {
+                    configuration.addAllowedOriginPattern("*");
+                } else {
+                    configuration.addAllowedOrigin(trimmed);
+                }
+            }
+        } else {
+            configuration.addAllowedOriginPattern("*");
+        }
+
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization", "Content-Type", "X-Total-Count"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

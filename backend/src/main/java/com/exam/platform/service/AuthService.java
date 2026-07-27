@@ -188,7 +188,11 @@ public class AuthService {
                 .build();
         emailVerificationTokenRepository.save(verificationToken);
 
-        emailService.sendVerificationEmail(savedUser.getEmail(), rawToken);
+       try {
+    emailService.sendVerificationEmail(savedUser.getEmail(), rawToken);
+} catch (Exception e) {
+    log.warn("Email sending failed. User created successfully but verification email was not sent.", e);
+}
         auditLogService.log(savedUser.getId(), "USER_REGISTERED", "Public registration completed with forced ROLE_STUDENT", ipAddress, userAgent);
 
         return getUserProfile(savedUser.getId());
