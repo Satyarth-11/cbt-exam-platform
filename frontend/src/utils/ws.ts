@@ -20,7 +20,10 @@ export const getWebSocketUrl = (path: string): string => {
     }
   }
 
-  // 3. Fallback for local development via Nginx / Localhost
+  // 3. Fallback for production hosting on Netlify or local development
+  if (typeof window !== 'undefined' && window.location.hostname.includes('netlify.app')) {
+    return `wss://cbt-backend-iv9e.onrender.com${path}`;
+  }
   const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
   const host = window.location.host.includes(':3000') ? 'localhost:8080' : window.location.host;
   return `${protocol}${host}${path}`;

@@ -7,6 +7,10 @@ const getApiBaseUrl = (): string => {
   if (envUrl && typeof envUrl === 'string' && envUrl.trim() !== '') {
     return envUrl.trim();
   }
+  // If running on Netlify directly without environment variable, point to Render backend
+  if (typeof window !== 'undefined' && window.location.hostname.includes('netlify.app')) {
+    return 'https://cbt-backend-iv9e.onrender.com/api/v1';
+  }
   return '/api/v1';
 };
 

@@ -44,8 +44,8 @@ public class SecurityConfig {
             String[] origins = allowedOrigins.split(",");
             for (String origin : origins) {
                 String trimmed = origin.trim();
-                if ("*".equals(trimmed)) {
-                    configuration.addAllowedOriginPattern("*");
+                if ("*".equals(trimmed) || trimmed.contains("*")) {
+                    configuration.addAllowedOriginPattern(trimmed);
                 } else {
                     configuration.addAllowedOrigin(trimmed);
                 }

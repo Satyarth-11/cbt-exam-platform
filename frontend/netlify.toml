@@ -3,6 +3,19 @@
   command = "npm run build"
 
 [[redirects]]
+  from = "/api/*"
+  to = "https://cbt-backend-iv9e.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ws/*"
+  to = "wss://cbt-backend-iv9e.onrender.com/ws/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
