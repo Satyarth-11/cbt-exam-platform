@@ -77,7 +77,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/me").authenticated()
                 .requestMatchers("/api/v1/auth/logout").authenticated()
                 // Other routes
-                .requestMatchers("/api/v1/health").permitAll()
+                .requestMatchers("/", "/health", "/api/v1/health").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/api/v1/admin/**").hasAnyRole("ADMIN", "EXAMINER")
                 .requestMatchers("/api/v1/examiner/**").hasAnyRole("EXAMINER", "ADMIN")
