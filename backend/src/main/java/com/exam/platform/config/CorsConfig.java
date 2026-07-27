@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Configuration
 public class CorsConfig {
 
-    @Value("${app.cors.allowed-origins:http://localhost:3000}")
+    @Value("${app.cors.allowed-origins:*,https://*.netlify.app,http://localhost:3000,http://localhost:80,http://localhost,http://127.0.0.1:3000}")
     private String allowedOriginsConfig;
 
     @Bean
@@ -28,7 +28,8 @@ public class CorsConfig {
                 .collect(Collectors.toList());
 
         config.setAllowedOriginPatterns(origins);
-        config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-Requested-With"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization", "Content-Type", "X-Total-Count"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
