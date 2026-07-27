@@ -40,18 +40,20 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        if (allowedOrigins != null && !allowedOrigins.isBlank()) {
+        // Always allow pattern wildcard matching so all Netlify previews & production URLs work cleanly
+        configuration.addAllowedOriginPattern("*");
+        if (allowedOrigins != null && !allowedOrigins.isBlank() && !"*".equals(allowedOrigins.trim())) {
             String[] origins = allowedOrigins.split(",");
             for (String origin : origins) {
                 String trimmed = origin.trim();
-                if ("*".equals(trimmed) || trimmed.contains("*")) {
-                    configuration.addAllowedOriginPattern(trimmed);
-                } else {
-                    configuration.addAllowedOrigin(trimmed);
+                if (!trimmed.isEmpty() && !"*".equals(trimmed)) {
+                    if (trimmed.contains("*")) {
+                        configuration.addAllowedOriginPattern(trimmed);
+                    } else {
+                        configuration.addAllowedOrigin(trimmed);
+                    }
                 }
             }
-        } else {
-            configuration.addAllowedOriginPattern("*");
         }
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));

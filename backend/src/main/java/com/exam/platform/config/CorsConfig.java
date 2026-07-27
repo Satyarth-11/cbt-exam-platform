@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configuration
+// @Configuration -- Disabled to prevent filter duplication. SecurityConfig handles CORS.
 public class CorsConfig {
 
     @Value("${app.cors.allowed-origins:*,https://*.netlify.app,http://localhost:3000,http://localhost:80,http://localhost,http://127.0.0.1:3000}")
