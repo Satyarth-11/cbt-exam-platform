@@ -3,9 +3,17 @@ import { store } from '../store';
 import { updateAccessToken, setSessionInvalidated, logout } from '../store/slices/authSlice';
 
 const getApiBaseUrl = (): string => {
-  const envUrl = (import.meta as any).env?.VITE_API_BASE_URL;
+  let envUrl = (import.meta as any).env?.VITE_API_BASE_URL;
   if (envUrl && typeof envUrl === 'string' && envUrl.trim() !== '') {
-    return envUrl.trim();
+    envUrl = envUrl.trim();
+    // Ensure the API base URL has the required /api/v1 suffix
+    if (!envUrl.endsWith('/api/v1') && !envUrl.endsWith('/api/v1/')) {
+      if (envUrl.endsWith('/api') || envUrl.endsWith('/api/')) {
+        return envUrl.endsWith('/') ? `${envUrl}v1` : `${envUrl}/v1`;
+      }
+      return envUrl.endsWith('/') ? `${envUrl}api/v1` : `${envUrl}/api/v1`;
+    }
+    return envUrl;
   }
   // If running on Netlify directly without environment variable, point to Render backend
   if (typeof window !== 'undefined' && window.location.hostname.includes('netlify.app')) {
