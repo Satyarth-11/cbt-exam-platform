@@ -17,7 +17,11 @@ export const ForgotPasswordPage: React.FC = () => {
 
     try {
       await axiosClient.post('/auth/forgot-password', { email });
-      setMessage('Instructions dispatched. Check MailHog dev inbox at http://localhost:8025');
+      if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')) {
+        setMessage('Instructions dispatched. Check MailHog dev inbox at http://localhost:8025');
+      } else {
+        setMessage('Instructions dispatched to your email address. (Note: If you have not configured a production SMTP mail server on Render, you can find the generated password reset link in your backend Render logs.)');
+      }
     } catch (err: any) {
       setError(err?.message || 'Failed to process request');
     } finally {

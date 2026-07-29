@@ -21,6 +21,7 @@ public class EmailService {
 
     public void sendPasswordResetEmail(String toEmail, String token) {
         String resetUrl = frontendUrl + "/reset-password?token=" + token;
+        log.info("[EMAIL SERVICE] Generated password reset link for {}: {}", toEmail, resetUrl);
         String content = "<h3>Password Reset Request</h3>" +
                 "<p>Click the link below to reset your National Testing Engine password:</p>" +
                 "<p><a href=\"" + resetUrl + "\">Reset Password</a></p>" +
@@ -31,6 +32,7 @@ public class EmailService {
 
     public void sendVerificationEmail(String toEmail, String token) {
         String verifyUrl = frontendUrl + "/verify-email?token=" + token;
+        log.info("[EMAIL SERVICE] Generated email verification link for {}: {}", toEmail, verifyUrl);
         String content = "<h3>Verify Your Email Address</h3>" +
                 "<p>Thank you for registering. Please click the link below to activate your candidate account:</p>" +
                 "<p><a href=\"" + verifyUrl + "\">Verify Email</a></p>";

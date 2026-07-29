@@ -10,6 +10,9 @@ backend/snapshots/
 *.jpeg
 *.jpg
 *.png
+!frontend/public/*.jpeg
+!frontend/public/*.jpg
+!frontend/public/*.png
 
 # Node / Frontend Build Outputs
 node_modules/

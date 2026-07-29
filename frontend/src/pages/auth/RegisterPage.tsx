@@ -29,8 +29,12 @@ export const RegisterPage: React.FC = () => {
         password,
         role: 'ROLE_STUDENT',
       });
-      setSuccessMsg('Registration successful! Verification email sent to MailHog (http://localhost:8025). Redirecting to login...');
-      setTimeout(() => navigate('/login'), 3000);
+      if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')) {
+        setSuccessMsg('Registration successful! Verification email sent to MailHog (http://localhost:8025). Redirecting to login...');
+      } else {
+        setSuccessMsg('Registration successful! Verification email sent. (Note: If you have not configured a production SMTP mail server on Render, you can find the verification link in your backend Render logs.) Redirecting to login...');
+      }
+      setTimeout(() => navigate('/login'), 4000);
     } catch (err: any) {
       setError(err?.message || 'Registration failed');
     } finally {
