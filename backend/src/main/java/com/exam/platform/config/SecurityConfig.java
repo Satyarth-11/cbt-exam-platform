@@ -101,6 +101,16 @@ public class SecurityConfig {
                 )
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(
+                        "{\"success\":false,\"message\":\"Full authentication is required to access this resource\",\"errorCode\":\"ERR_UNAUTHORIZED\"}"
+                    );
+                })
+            )
             .authorizeHttpRequests(auth -> auth
                 // Allow CORS Preflight OPTIONS requests for all endpoints
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
