@@ -54,7 +54,7 @@ const AppRouter: React.FC = () => {
       <Header />
       <main className="flex-1 flex flex-col">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
