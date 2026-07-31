@@ -5,9 +5,10 @@ import axiosClient from '../../api/axiosClient';
 
 export const ResetPasswordPage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token') || '';
+  const tokenFromUrl = searchParams.get('token') || '';
   const navigate = useNavigate();
 
+  const [token, setToken] = useState(tokenFromUrl);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,10 @@ export const ResetPasswordPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!token.trim()) {
+      setError('Reset token is required');
+      return;
+    }
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -27,7 +32,7 @@ export const ResetPasswordPage: React.FC = () => {
 
     try {
       await axiosClient.post('/auth/reset-password', {
-        token,
+        token: token.trim(),
         newPassword,
       });
       setMessage('Password updated successfully! All active sessions revoked. Redirecting to login...');
@@ -62,6 +67,20 @@ export const ResetPasswordPage: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {!tokenFromUrl && (
+            <div>
+              <label className="block text-xs font-medium text-slate-300 mb-1">Reset Token / OTP</label>
+              <input
+                type="text"
+                required
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="Enter your reset token"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 text-sm"
+              />
+            </div>
+          )}
+
           <div>
             <label className="block text-xs font-medium text-slate-300 mb-1">New Password</label>
             <div className="relative">
@@ -94,7 +113,7 @@ export const ResetPasswordPage: React.FC = () => {
 
           <button
             type="submit"
-            disabled={loading || !token}
+            disabled={loading || !token.trim()}
             className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold text-sm hover:from-blue-500 hover:to-cyan-500 shadow-md transition-all disabled:opacity-50"
           >
             {loading ? 'Updating Password...' : 'Update Password'}

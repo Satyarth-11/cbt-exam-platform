@@ -19,13 +19,13 @@ export const ForgotPasswordPage: React.FC = () => {
     try {
       await axiosClient.post('/auth/forgot-password', { email });
       if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')) {
-        setMessage('Instructions dispatched. Check MailHog dev inbox at http://localhost:8025. Redirecting to password reset page...');
+        setMessage('Reset OTP sent! Redirecting to reset page...');
       } else {
-        setMessage('Instructions dispatched to your email address. (Note: If you have not configured a production SMTP mail server on Render, check the backend Render logs.) Redirecting to password reset page...');
+        setMessage('Reset OTP sent! Check your email or Render logs. Redirecting...');
       }
       setTimeout(() => {
         navigate('/reset-password');
-      }, 4000);
+      }, 2500);
     } catch (err: any) {
       setError(err?.message || 'Failed to process request');
     } finally {
@@ -38,7 +38,7 @@ export const ForgotPasswordPage: React.FC = () => {
       <div className="glass-panel p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-white">Reset Password</h2>
-          <p className="text-xs text-slate-400 mt-1">Enter your candidate email address to receive a recovery link</p>
+          <p className="text-xs text-slate-400 mt-1">Enter your candidate email address to receive a 6-digit OTP code</p>
         </div>
 
         {message && (
@@ -76,7 +76,7 @@ export const ForgotPasswordPage: React.FC = () => {
             disabled={loading}
             className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold text-sm hover:from-blue-500 hover:to-cyan-500 shadow-md transition-all disabled:opacity-50"
           >
-            {loading ? 'Sending Request...' : 'Send Reset Link'}
+            {loading ? 'Sending OTP...' : 'Send Reset OTP'}
           </button>
         </form>
 
