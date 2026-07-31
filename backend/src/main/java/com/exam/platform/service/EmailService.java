@@ -20,22 +20,22 @@ public class EmailService {
     private String frontendUrl;
 
     public void sendPasswordResetEmail(String toEmail, String token) {
-        String resetUrl = frontendUrl + "/reset-password?token=" + token;
-        log.info("[EMAIL SERVICE] Generated password reset link for {}: {}", toEmail, resetUrl);
-        String content = "<h3>Password Reset Request</h3>" +
-                "<p>Click the link below to reset your National Testing Engine password:</p>" +
-                "<p><a href=\"" + resetUrl + "\">Reset Password</a></p>" +
-                "<p>This token will expire in 30 minutes.</p>";
+        log.info("[EMAIL SERVICE] Generated password reset OTP for {}: {}", toEmail, token);
+        String content = "<h3>Password Reset OTP</h3>" +
+                "<p>Your One-Time Password (OTP) to reset your National Testing Engine password is:</p>" +
+                "<h2 style=\"font-size: 24px; letter-spacing: 4px; color: #0284c7;\">" + token + "</h2>" +
+                "<p>Enter this OTP code on the website to reset your password.</p>" +
+                "<p>This OTP will expire in 30 minutes.</p>";
 
         sendEmail(toEmail, "Reset Your CBT Engine Password", content);
     }
 
     public void sendVerificationEmail(String toEmail, String token) {
-        String verifyUrl = frontendUrl + "/verify-email?token=" + token;
-        log.info("[EMAIL SERVICE] Generated email verification link for {}: {}", toEmail, verifyUrl);
-        String content = "<h3>Verify Your Email Address</h3>" +
-                "<p>Thank you for registering. Please click the link below to activate your candidate account:</p>" +
-                "<p><a href=\"" + verifyUrl + "\">Verify Email</a></p>";
+        log.info("[EMAIL SERVICE] Generated email verification OTP for {}: {}", toEmail, token);
+        String content = "<h3>Email Verification OTP</h3>" +
+                "<p>Thank you for registering. Your verification One-Time Password (OTP) is:</p>" +
+                "<h2 style=\"font-size: 24px; letter-spacing: 4px; color: #0284c7;\">" + token + "</h2>" +
+                "<p>Enter this code on the website to activate your account.</p>";
 
         sendEmail(toEmail, "Verify Your CBT Engine Account", content);
     }

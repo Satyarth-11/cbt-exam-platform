@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
 import axiosClient from '../../api/axiosClient';
 
 export const ForgotPasswordPage: React.FC = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -18,10 +19,13 @@ export const ForgotPasswordPage: React.FC = () => {
     try {
       await axiosClient.post('/auth/forgot-password', { email });
       if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')) {
-        setMessage('Instructions dispatched. Check MailHog dev inbox at http://localhost:8025');
+        setMessage('Instructions dispatched. Check MailHog dev inbox at http://localhost:8025. Redirecting to password reset page...');
       } else {
-        setMessage('Instructions dispatched to your email address. (Note: If you have not configured a production SMTP mail server on Render, you can find the generated password reset link in your backend Render logs.)');
+        setMessage('Instructions dispatched to your email address. (Note: If you have not configured a production SMTP mail server on Render, check the backend Render logs.) Redirecting to password reset page...');
       }
+      setTimeout(() => {
+        navigate('/reset-password');
+      }, 4000);
     } catch (err: any) {
       setError(err?.message || 'Failed to process request');
     } finally {

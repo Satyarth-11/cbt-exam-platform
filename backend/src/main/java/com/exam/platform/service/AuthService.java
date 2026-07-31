@@ -176,8 +176,8 @@ public class AuthService {
         user.getRoles().add(studentRole);
         User savedUser = userRepository.save(user);
 
-        // Generate email verification token with deterministic SHA-256 hex hashing
-        String rawToken = UUID.randomUUID().toString();
+        // Generate 6-digit email verification OTP with deterministic SHA-256 hex hashing
+        String rawToken = String.format("%06d", new java.util.Random().nextInt(1000000));
         String tokenHash = TokenHashUtils.hashToken(rawToken);
 
         EmailVerificationToken verificationToken = EmailVerificationToken.builder()
@@ -259,7 +259,7 @@ public class AuthService {
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request, String ipAddress, String userAgent) {
         userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            String rawToken = UUID.randomUUID().toString();
+            String rawToken = String.format("%06d", new java.util.Random().nextInt(1000000));
             String tokenHash = TokenHashUtils.hashToken(rawToken);
 
             PasswordResetToken resetToken = PasswordResetToken.builder()
