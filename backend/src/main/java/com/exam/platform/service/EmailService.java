@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,6 +20,7 @@ public class EmailService {
     @Value("${app.frontend.url:http://localhost:3000}")
     private String frontendUrl;
 
+    @Async
     public void sendPasswordResetEmail(String toEmail, String token) {
         log.info("[EMAIL SERVICE] Generated password reset OTP for {}: {}", toEmail, token);
         String content = "<h3>Password Reset OTP</h3>" +
@@ -30,6 +32,7 @@ public class EmailService {
         sendEmail(toEmail, "Reset Your CBT Engine Password", content);
     }
 
+    @Async
     public void sendVerificationEmail(String toEmail, String token) {
         log.info("[EMAIL SERVICE] Generated email verification OTP for {}: {}", toEmail, token);
         String content = "<h3>Email Verification OTP</h3>" +
