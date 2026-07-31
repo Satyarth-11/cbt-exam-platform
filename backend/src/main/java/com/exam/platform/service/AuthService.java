@@ -258,21 +258,22 @@ public class AuthService {
 
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request, String ipAddress, String userAgent) {
-        userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            String rawToken = String.format("%06d", new java.util.Random().nextInt(1000000));
-            String tokenHash = TokenHashUtils.hashToken(rawToken);
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("No account exists with this email address!"));
 
-            PasswordResetToken resetToken = PasswordResetToken.builder()
-                    .user(user)
-                    .tokenHash(tokenHash)
-                    .expiresAt(Instant.now().plusSeconds(1800)) // 30 mins
-                    .used(false)
-                    .build();
-            passwordResetTokenRepository.save(resetToken);
+        String rawToken = String.format("%06d", new java.util.Random().nextInt(1000000));
+        String tokenHash = TokenHashUtils.hashToken(rawToken);
 
-            emailService.sendPasswordResetEmail(user.getEmail(), rawToken);
-            auditLogService.log(user.getId(), "PASSWORD_RESET_REQUESTED", "Password reset link dispatched", ipAddress, userAgent);
-        });
+        PasswordResetToken resetToken = PasswordResetToken.builder()
+                .user(user)
+                .tokenHash(tokenHash)
+                .expiresAt(Instant.now().plusSeconds(1800)) // 30 mins
+                .used(false)
+                .build();
+        passwordResetTokenRepository.save(resetToken);
+
+        emailService.sendPasswordResetEmail(user.getEmail(), rawToken);
+        auditLogService.log(user.getId(), "PASSWORD_RESET_REQUESTED", "Password reset link dispatched", ipAddress, userAgent);
     }
 
     @Transactional
