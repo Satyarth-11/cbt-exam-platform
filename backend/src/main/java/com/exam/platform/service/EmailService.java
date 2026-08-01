@@ -55,7 +55,11 @@ public class EmailService {
             mailSender.send(message);
             log.info("Sent email to: {}, Subject: {}", to, subject);
         } catch (MessagingException e) {
-            log.error("Failed to send email to {}: {}", to, e.getMessage());
+            log.error("Failed to send email to {} (MessagingException): {}", to, e.getMessage());
+        } catch (Exception e) {
+            // MailSendException (thrown by mailSender.send()) extends RuntimeException,
+            // not MessagingException — this catches SMTP auth failures, connection errors, etc.
+            log.error("Failed to send email to {} ({}): {}", to, e.getClass().getSimpleName(), e.getMessage());
         }
     }
 }

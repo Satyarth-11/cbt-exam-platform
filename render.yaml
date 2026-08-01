@@ -42,3 +42,27 @@ services:
         sync: false # Set in Render Dashboard to Netlify site URL (e.g. https://your-site.netlify.app)
       - key: APP_SNAPSHOT_STORAGE_DIR
         value: ./snapshots
+      # ── Email (SMTP) Configuration ──────────────────────────────────────────
+      # Set these in the Render Dashboard. Recommended provider: Gmail (App Password),
+      # SendGrid, Mailgun, or Brevo. Example for Gmail:
+      #   SPRING_MAIL_HOST=smtp.gmail.com
+      #   SPRING_MAIL_PORT=587
+      #   SPRING_MAIL_USERNAME=your-address@gmail.com
+      #   SPRING_MAIL_PASSWORD=your-16-char-app-password
+      - key: SPRING_MAIL_HOST
+        sync: false # e.g. smtp.gmail.com
+      - key: SPRING_MAIL_PORT
+        sync: false # e.g. 587
+      - key: SPRING_MAIL_USERNAME
+        sync: false # your SMTP login address
+      - key: SPRING_MAIL_PASSWORD
+        sync: false # your SMTP password / app-password
+      - key: SPRING_MAIL_SMTP_AUTH
+        value: "true"
+      - key: SPRING_MAIL_SMTP_STARTTLS_ENABLE
+        value: "true"
+      # ── Telegram Admin Notifications ────────────────────────────────────────
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false # Set in Render Dashboard
+      - key: TELEGRAM_ADMIN_CHAT_ID
+        sync: false # Set in Render Dashboard

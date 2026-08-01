@@ -37,26 +37,26 @@ public class TelegramNotifierService {
 
         try {
             String message = String.format(
-                "🚨 *NEW UPI PAYMENT CLAIM SUBMITTED*\n\n" +
-                "👤 *Student:* %s (%s)\n" +
-                "🪙 *Credits Claimed:* %d Credits\n" +
-                "💰 *Amount Claimed:* ₹%.2f INR\n" +
-                "🔖 *Order Ref (UPI Note):* `%s`\n" +
-                "🔢 *UTR Reference:* `%s`\n\n" +
-                " Please verify in Admin Panel before approving.",
-                escapeMarkdown(studentName),
-                escapeMarkdown(studentEmail),
+                "🚨 <b>NEW UPI PAYMENT CLAIM SUBMITTED</b>\n\n" +
+                "👤 <b>Student:</b> %s (%s)\n" +
+                "🪙 <b>Credits Claimed:</b> %d Credits\n" +
+                "💰 <b>Amount Claimed:</b> ₹%.2f INR\n" +
+                "🔖 <b>Order Ref (UPI Note):</b> <code>%s</code>\n" +
+                "🔢 <b>UTR Reference:</b> <code>%s</code>\n\n" +
+                "✅ Please verify in Admin Panel before approving.",
+                escapeHtml(studentName),
+                escapeHtml(studentEmail),
                 credits,
                 amount,
-                orderReference,
-                utr != null && !utr.isBlank() ? escapeMarkdown(utr) : "Not Provided"
+                escapeHtml(orderReference),
+                utr != null && !utr.isBlank() ? escapeHtml(utr) : "Not Provided"
             );
 
             String url = String.format("https://api.telegram.org/bot%s/sendMessage", botToken.trim());
             Map<String, Object> request = Map.of(
                 "chat_id", adminChatId.trim(),
                 "text", message,
-                "parse_mode", "Markdown"
+                "parse_mode", "HTML"
             );
 
             restTemplate.postForObject(url, request, String.class);
@@ -66,8 +66,11 @@ public class TelegramNotifierService {
         }
     }
 
-    private String escapeMarkdown(String text) {
+    private String escapeHtml(String text) {
         if (text == null) return "";
-        return text.replace("_", "\\_").replace("*", "\\*").replace("`", "\\`");
+        return text
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;");
     }
 }
