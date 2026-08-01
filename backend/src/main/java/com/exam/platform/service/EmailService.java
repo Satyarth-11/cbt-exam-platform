@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +20,20 @@ public class EmailService {
 
     @Value("${app.frontend.url:http://localhost:3000}")
     private String frontendUrl;
+
+    @Value("${spring.mail.host:NOT_SET}")
+    private String mailHost;
+
+    @Value("${spring.mail.port:0}")
+    private int mailPort;
+
+    @Value("${spring.mail.username:NOT_SET}")
+    private String mailUsername;
+
+    @PostConstruct
+    public void logMailConfig() {
+        log.info("[EMAIL SERVICE] SMTP config — host: {}, port: {}, username: {}", mailHost, mailPort, mailUsername);
+    }
 
     @Async
     public void sendPasswordResetEmail(String toEmail, String token) {
@@ -55,11 +70,11 @@ public class EmailService {
             mailSender.send(message);
             log.info("Sent email to: {}, Subject: {}", to, subject);
         } catch (MessagingException e) {
-            log.error("Failed to send email to {} (MessagingException): {}", to, e.getMessage());
+            log.error("[EMAIL SERVICE] Failed to send email to {} (MessagingException): {}", to, e.getMessage(), e);
         } catch (Exception e) {
             // MailSendException (thrown by mailSender.send()) extends RuntimeException,
             // not MessagingException — this catches SMTP auth failures, connection errors, etc.
-            log.error("Failed to send email to {} ({}): {}", to, e.getClass().getSimpleName(), e.getMessage());
+            log.error("[EMAIL SERVICE] Failed to send email to {} ({}): {}", to, e.getClass().getSimpleName(), e.getMessage(), e);
         }
     }
 }
