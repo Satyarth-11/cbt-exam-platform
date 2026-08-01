@@ -1,5 +1,6 @@
 package com.exam.platform.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -20,6 +21,13 @@ public class TelegramNotifierService {
     private String adminChatId;
 
     private final RestTemplate restTemplate = new RestTemplate();
+
+    @PostConstruct
+    public void logTelegramConfig() {
+        boolean tokenSet = botToken != null && !botToken.isBlank();
+        boolean chatIdSet = adminChatId != null && !adminChatId.isBlank();
+        log.info("[TELEGRAM] Config check — BOT_TOKEN configured: {}, ADMIN_CHAT_ID configured: {}", tokenSet, chatIdSet);
+    }
 
     @Async
     public void sendPaymentClaimNotification(
@@ -62,7 +70,8 @@ public class TelegramNotifierService {
             restTemplate.postForObject(url, request, String.class);
             log.info("Telegram notification successfully sent for order ref {}", orderReference);
         } catch (Exception e) {
-            log.warn("Failed to send Telegram notification for order ref {}: {}", orderReference, e.getMessage());
+            log.error("[TELEGRAM] Failed to send notification for order ref {} ({}): {}",
+                orderReference, e.getClass().getSimpleName(), e.getMessage(), e);
         }
     }
 

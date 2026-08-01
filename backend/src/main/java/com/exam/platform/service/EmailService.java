@@ -65,7 +65,7 @@ public class EmailService {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
-            helper.setFrom("noreply@cbt-engine.org");
+            helper.setFrom(mailUsername, "CBT Engine");
 
             mailSender.send(message);
             log.info("Sent email to: {}, Subject: {}", to, subject);

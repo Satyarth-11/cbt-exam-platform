@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
-@Profile({"dev", "local", "prod"})
+@Profile({"dev", "local"})
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 

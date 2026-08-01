@@ -36,6 +36,9 @@ spring:
           auth: ${SPRING_MAIL_SMTP_AUTH:false}
           starttls:
             enable: ${SPRING_MAIL_SMTP_STARTTLS_ENABLE:false}
+          connectiontimeout: 10000   # 10s — fail fast if Gmail unreachable
+          timeout: 10000             # 10s — read timeout
+          writetimeout: 10000        # 10s — write timeout
 
 management:
   endpoints:
